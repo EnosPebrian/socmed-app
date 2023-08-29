@@ -1,0 +1,35 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "test",
+      "email": "test@mail.com",
+      "gender": "male",
+      "password": "password",
+      "bio": "",
+      "image_url": "",
+      "fullname": ""
+    },
+    {
+      "username": "smurfid 2000",
+      "email": "smurfid2000@gmail.com",
+      "gender": "",
+      "password": "",
+      "bio": "",
+      "image_url": "https://lh3.googleusercontent.com/a/AAcHTtc9WO548mQQBEADr7OraQ4vi1JdPcg2JZ-RnfMOPLFA=s96-c",
+      "fullname": "",
+      "google_uid": "107590254948340368382",
+      "id": 2
+    },
+    {
+      "email": "aaa@gmail.com",
+      "password": "aaaaaaaa",
+      "username": "aaa@gmail.com",
+      "gender": "",
+      "bio": "",
+      "image_url": "",
+      "fullname": "",
+      "id": 3
+    }
+  ]
+}
