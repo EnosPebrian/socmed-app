@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("instagram-auth");
     if (!token) return setIsLoading(false);
     await api
-      .get(`/user/token/${token}`)
+      .get(`/user/token/`)
       .then((result) => {
         dispatch({
           type: types.login,

@@ -6,8 +6,8 @@ function App() {
   return (
     <>
       <Routes>
-        {routes.map((page) => (
-          <Route {...page} />
+        {routes.map((page, index) => (
+          <Route {...page} key={index} />
         ))}
       </Routes>
     </>

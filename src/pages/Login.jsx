@@ -1,11 +1,11 @@
-import { SVGinstagram } from "../components/SVG_Instagram";
+import { SVGinstagram } from "../components/SVG/SVG_Instagram";
 import * as Yup from "yup";
 import * as YupPassword from "yup-password";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
 import { Card, Container, Form } from "react-bootstrap";
 import { useState } from "react";
-import { SVGeyePassword } from "../components/SVG_eye_password";
+import { SVGeyePassword } from "../components/SVG/SVG_eye_password";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../redux/middleware/auth-middleware";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../library/firebase";
 import { useToast } from "@chakra-ui/react";
-import { SVGorRegister } from "../components/SVGorRegister";
+import { SVGorRegister } from "../components/SVG/SVGorRegister";
 import { api } from "../json-server/api";
 
 class NewUser {
@@ -170,6 +170,7 @@ export const Login = () => {
       });
     },
   });
+
   return (
     <>
       <Container
@@ -229,13 +230,23 @@ export const Login = () => {
             </div>
           </Form>
           <span className="my-4">
-            <span className="mt-1">Forget your login details?</span>
+            {/* <span className="mt-1">Forget your login details?</span> */}
+            <a
+              href="/forgot_password"
+              style={{ textDecoration: "none" }}
+              className="mx-1"
+            >
+              <b>Forgot password?</b>
+            </a>
+          </span>
+          <span className="">
+            <span className="mt-1">Dont have an account?</span>
             <a
               href="/register"
               style={{ textDecoration: "none" }}
-              className="ml-1"
+              className="mx-1"
             >
-              Get help logging in
+              <b>Register</b>
             </a>
           </span>
           <SVGorRegister />

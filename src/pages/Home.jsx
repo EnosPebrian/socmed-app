@@ -1,71 +1,139 @@
 import { useSelector } from "react-redux";
-import { SVGinstagram } from "../components/SVG_Instagram";
-import { Container } from "react-bootstrap";
+import { SVGinstagram } from "../components/SVG/SVG_Instagram";
+import { Col, Container, Row } from "react-bootstrap";
 import FetchStory from "../components/FetchStory";
-import FetchPosts from "../components/FetchPosts";
+import PostsCardHome from "../components/PostsCardHome";
 import Sidebar from "../components/Sidebar";
 import "../components/style.css";
+import { useEffect, useRef, useState } from "react";
+import { api } from "../json-server/api";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const Home = () => {
   const userSelector = useSelector((state) => state.auth);
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [queryText, setQueryText] = useState("");
+  const ref = useRef(1);
+  const fetchPosts = async (queryString = "", page = 1) => {
+    await api
+      .get(`/post/q?limit=5&text=${queryText}&page=${page}`)
+      .then((result) => {
+        setPage(result.data.number_of_page);
+        setPosts(result.data.data);
+      })
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    fetchPosts(queryText, page);
+  }, []);
+
+  const handleNext = () => {
+    ref.current += 2;
+    fetchPosts(queryText, ref.current);
+  };
+
   return (
     <>
-      <Container className="p-0" style={{ maxWidth: "630px" }}>
-        <Container
-          style={{
-            position: "sticky",
-            top: "0px",
-            backgroundColor: "white",
-            zIndex: 2,
-          }}
+      <Row
+        className="flex-nowrap d-flex justify-content-center"
+        style={{ maxWidth: "99vw", margin: "0" }}
+      >
+        <Col
+          md={1}
+          lg={1}
+          xl={1}
+          xxl={2}
+          className="border-end border-secondary-subtle vh-100 d-none d-md-block d-lg-block d-xl-block d-xxl-block"
+          style={{ position: "sticky", top: "0", padding: "0 0 0 10px" }}
         >
-          <div className="d-flex justify-content-around align-items-center mt-3">
-            <SVGinstagram />
-            <div className="d-flex flex-row" style={{ gap: "20px" }}>
-              <a>
-                <img
-                  src="https://img.icons8.com/?size=1x&id=FFls4U4qS13I&format=png"
-                  alt="plus logo"
-                  style={{ maxWidth: "24px" }}
-                />
-              </a>
-              <a>
-                <img
-                  src="https://img.icons8.com/?size=1x&id=lFyaayFdhpED&format=gif"
-                  alt="plus logo"
-                  style={{ maxWidth: "24px" }}
-                />
-              </a>
-              <a>
-                <img
-                  src="https://img.icons8.com/?size=512&id=20202&format=png"
-                  alt="messanger logo"
-                  style={{ maxWidth: "24px" }}
-                />
-              </a>
-            </div>
-          </div>
-        </Container>
-        <Container
-          id="story-container"
-          className="d-flex flex-row my-3 p-0 ml-2"
-          style={{
-            gap: "10px",
-            overflowX: "scroll",
-            maxWidth: "630px",
-          }}
+          <Sidebar fetchPosts={fetchPosts} />
+        </Col>
+        <Col
+          xxl={10}
+          xl={11}
+          lg={11}
+          md={11}
+          style={{ padding: "0", display: "flex", justifyContent: "center" }}
         >
-          <FetchStory />
-        </Container>
-        <Container className="p-0 d-flex justify-content-center">
-          <FetchPosts />
-        </Container>
-        <Container
-          style={{ position: "sticky", bottom: "0", backgroundColor: "white" }}
-        >
-          <Sidebar />
-        </Container>
-      </Container>
+          <Container className="p-0" style={{ maxWidth: "975px" }}>
+            <Container
+              style={{
+                position: "sticky",
+                top: "0px",
+                backgroundColor: "white",
+                zIndex: 2,
+              }}
+            >
+              {/* <div className="d-flex justify-content-around align-items-center mt-3">
+                <SVGinstagram />
+                <div className="d-flex flex-row" style={{ gap: "20px" }}>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=FFls4U4qS13I&format=png"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=lFyaayFdhpED&format=gif"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=512&id=20202&format=png"
+                      alt="messanger logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                </div>
+              </div> */}
+            </Container>
+            <Container
+              id="story-container"
+              className="d-flex flex-row my-3 p-0 ml-2"
+              style={{
+                gap: "10px",
+                overflowX: "scroll",
+                maxWidth: "630px",
+              }}
+            >
+              <FetchStory />
+            </Container>
+            <Container className="p-0 d-flex justify-content-center">
+              <InfiniteScroll
+                dataLength={5} //This is important field to render the next data
+                next={handleNext}
+                hasMore={ref.current <= page}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                  <p style={{ textAlign: "center" }}>
+                    <b>Yay! You have seen it all</b>
+                  </p>
+                }
+              >
+                {posts.map((post, index) => (
+                  <PostsCardHome
+                    post={post}
+                    index={index}
+                    fetchPosts={fetchPosts}
+                  />
+                ))}
+              </InfiniteScroll>
+            </Container>
+            <Container
+              style={{
+                position: "sticky",
+                bottom: "0",
+                backgroundColor: "white",
+              }}
+            ></Container>
+          </Container>
+        </Col>
+      </Row>
     </>
   );
 };

@@ -11,7 +11,8 @@ export const userLogin = (values) => {
       return "success";
     } catch (err) {
       localStorage.removeItem("instagram-auth");
-      return err.message;
+      console.log(err);
+      return err.response.data;
     }
   };
 };
@@ -21,5 +22,20 @@ export const userLogout = () => {
 };
 
 export const userUpdate = (id, values) => {
-  return async (dispatch) => {};
+  return async (dispatch) => {
+    try {
+      const formData = new FormData();
+      Object.entries(values).map(([key, value]) => {
+        formData.append(key, value);
+      });
+      const user = await api.patch(`/user/${id}`, formData);
+      dispatch({
+        type: types.login,
+        payload: user.data,
+      });
+      return "success";
+    } catch (err) {
+      return err?.message;
+    }
+  };
 };
