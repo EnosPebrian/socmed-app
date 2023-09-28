@@ -61,7 +61,10 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
   }, [userSelector.id]);
 
   return (
-    <div style={{ maxWidth: "470px" }} key={index} className="d-flex">
+    <div
+      style={{ maxWidth: "470px", margin: "0 auto" }}
+      key={`poscard` + index}
+    >
       <div className="my-2 border-bottom border-secondary-subtle py-3">
         <div className="d-flex align-items-center justify-content-between w-100 mb-2">
           <div className="d-flex align-items-center w-100">
@@ -71,7 +74,7 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
             >
               <div>
                 <img
-                  src={post.user.image_url}
+                  src={avatar_url + post.user.image_url}
                   alt=""
                   width="32px"
                   style={{ borderRadius: "50%" }}

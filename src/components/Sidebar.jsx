@@ -14,7 +14,9 @@ export default function Sidebar({ fetchPosts }) {
         <div className="pb-2 pl-2">
           <div className="my-4">
             <SVG_logoInstagram />
-            <SVGinstagram />
+            <div className="d-none d-xxl-block">
+              <SVGinstagram />
+            </div>
           </div>
         </div>
         <a

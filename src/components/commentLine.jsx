@@ -5,7 +5,7 @@ export const CommentLine = ({ comment, index }) => {
   return (
     <div
       className="my-3"
-      key={index}
+      key={`commentline-` + index}
       style={{ display: "grid", gridTemplateColumns: "40px auto 32px" }}
     >
       <div className="mx-3" style={{ minWidth: "32px" }}>

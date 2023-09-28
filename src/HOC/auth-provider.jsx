@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { types } from "../redux";
 import { useEffect, useState } from "react";
 import { api } from "../json-server/api";
+import { Spinner } from "react-bootstrap";
 
 export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
@@ -12,7 +13,9 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("instagram-auth");
     if (!token) return setIsLoading(false);
     await api
-      .get(`/user/token/`)
+      .get(`/user/token/`, {
+        headers: { Authorization: "Bearer " + token },
+      })
       .then((result) => {
         dispatch({
           type: types.login,
@@ -36,5 +39,5 @@ export const AuthProvider = ({ children }) => {
     if (userSelector.id) setIsLoading(false);
   }, [userSelector]);
 
-  return isLoading ? <></> : children;
+  return isLoading ? <Spinner /> : children;
 };

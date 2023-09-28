@@ -40,12 +40,12 @@ export const Home = () => {
         style={{ maxWidth: "99vw", margin: "0" }}
       >
         <Col
-          md={1}
-          lg={1}
-          xl={1}
+          md={`auto`}
+          lg={`auto`}
+          xl={`auto`}
           xxl={2}
           className="border-end border-secondary-subtle vh-100 d-none d-md-block d-lg-block d-xl-block d-xxl-block"
-          style={{ position: "sticky", top: "0", padding: "0 0 0 10px" }}
+          style={{ position: "sticky", top: "0", padding: "0", margin: "0" }}
         >
           <Sidebar fetchPosts={fetchPosts} />
         </Col>
@@ -65,8 +65,10 @@ export const Home = () => {
                 zIndex: 2,
               }}
             >
-              {/* <div className="d-flex justify-content-around align-items-center mt-3">
-                <SVGinstagram />
+              <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
+                <div>
+                  <SVGinstagram />
+                </div>
                 <div className="d-flex flex-row" style={{ gap: "20px" }}>
                   <a>
                     <img
@@ -90,7 +92,7 @@ export const Home = () => {
                     />
                   </a>
                 </div>
-              </div> */}
+              </div>
             </Container>
             <Container
               id="story-container"
@@ -103,7 +105,7 @@ export const Home = () => {
             >
               <FetchStory />
             </Container>
-            <Container className="p-0 d-flex justify-content-center">
+            <Container className="p-0">
               <InfiniteScroll
                 dataLength={5} //This is important field to render the next data
                 next={handleNext}
