@@ -15,17 +15,17 @@ import { AuthProvider } from "./HOC/auth-provider";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const store = configureStore({ reducer: reducers, middleware: [thunk] });
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ChakraProvider>
-        <Provider store={store}>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </Provider>
-      </ChakraProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <BrowserRouter>
+    <ChakraProvider>
+      <Provider store={store}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </Provider>
+    </ChakraProvider>
+  </BrowserRouter>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

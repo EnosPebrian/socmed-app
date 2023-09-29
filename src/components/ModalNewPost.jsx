@@ -13,6 +13,29 @@ export const ModalNewPost = ({ setShowModal, show, fetchPosts }) => {
     setShowModal("");
   };
   const toast = useToast();
+
+  const ToastSuccess = (title = "Success", description = "") => {
+    return toast({
+      status: "success",
+      title: title,
+      description: description,
+      duration: 2000,
+      isClosable: true,
+      position: "top",
+    });
+  };
+
+  const ToastError = (title = "Error", description = "") => {
+    return toast({
+      status: "error",
+      title: title,
+      description: description,
+      duration: 2000,
+      isClosable: true,
+      position: "top",
+    });
+  };
+
   const userSelector = useSelector((state) => state.auth);
   const formik = useFormik({
     initialValues: { image_url: "", image: "", caption: "" },
@@ -30,9 +53,10 @@ export const ModalNewPost = ({ setShowModal, show, fetchPosts }) => {
         const token = localStorage.getItem("instagram-auth");
         handleClose();
         await api.post(`/post/new_post?token=${token}`, formData);
+        ToastSuccess();
         fetchPosts(1);
       } catch (err) {
-        console.log(err);
+        ToastError("Error on generating new post", err?.response?.data);
       }
     },
   });

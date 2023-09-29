@@ -4,14 +4,14 @@ import { SVGinstagram } from "./SVG/SVG_Instagram";
 import { SVG_logoInstagram } from "./SVG/SVG_logo_Instagram";
 import { useSelector } from "react-redux";
 
-export default function Sidebar({ fetchPosts }) {
+export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
   const [showModal, setShowModal] = useState("");
   const userSelector = useSelector((state) => state.auth);
 
   return (
     <>
-      <div className="d-flex flex-column p-2">
-        <div className="pb-2 pl-2">
+      <div className={"d-flex p-2 gap-4 " + flexdir}>
+        <div className="pb-2 pl-2 d-md-block d-none">
           <div className="my-4">
             <SVG_logoInstagram />
             <div className="d-none d-xxl-block">
@@ -19,6 +19,7 @@ export default function Sidebar({ fetchPosts }) {
             </div>
           </div>
         </div>
+        <div></div>
         <a
           href="/home"
           className="d-flex align-items-center pl-2 gap-2"

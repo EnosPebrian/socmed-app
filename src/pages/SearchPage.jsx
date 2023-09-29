@@ -5,28 +5,25 @@ import { CardPics } from "./Profile";
 import Sidebar from "../components/Sidebar";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-
 export const SearchPage = () => {
   const [post, setPost] = useState([]);
-  const [page, setPage] = useState(1);
   const [queryText, setQueryText] = useState("");
+  const limit = 9;
   const ref = useRef(1);
+  const totalPost = useRef(limit);
 
-  const fetchPost = async (queryText, page) => {
+  const fetchPost = async (queryText) => {
     await api
-      .get(`/post/q?limit=12&text=${queryText}&page=${page}`)
+      .get(`/post/q?limit=${limit}&text=${queryText}&page=${ref.current}`)
       .then((result) => {
-        console.log(result);
         setPost(result.data.data);
-        setPage(result.data.number_of_page);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    fetchPost(queryText, ref.current);
-  }, []);
-  useEffect(() => {
+    ref.current = 1;
+    totalPost.current = 0;
     const execute_search = setTimeout(
       () => fetchPost(queryText, ref.current),
       500
@@ -34,13 +31,31 @@ export const SearchPage = () => {
     return () => clearTimeout(execute_search);
   }, [queryText]);
 
+  console.log(totalPost.current, post.length);
+
   return (
     <>
-      <Row>
-        <Col lg={2}>
-          <Sidebar fetchPost={fetchPost} />
+      <Row
+        className="flex-nowrap d-flex justify-content-center"
+        style={{ maxWidth: "99vw", margin: "0" }}
+      >
+        <Col
+          md={`auto`}
+          lg={`auto`}
+          xl={`auto`}
+          xxl={2}
+          className="border-end border-secondary-subtle vh-100 d-none d-md-block d-lg-block d-xl-block d-xxl-block"
+          style={{ position: "sticky", top: "0", padding: "0", margin: "0" }}
+        >
+          <Sidebar fetchPosts={fetchPost} />
         </Col>
-        <Col>
+        <Col
+          xxl={10}
+          xl={11}
+          lg={11}
+          md={11}
+          style={{ padding: "0", display: "flex", justifyContent: "center" }}
+        >
           <Container className="p-0 m-0">
             <Container style={{ maxWidth: "975px" }}>
               <Form>
@@ -61,23 +76,39 @@ export const SearchPage = () => {
                   />
                 </Form.Group>
               </Form>
-              <Row className="p-0 m-0 d-flex" style={{ gap: "4px" }}>
-                <InfiniteScroll
-                  dataLength={12}
-                  next={() => {
-                    ref.current = ref.current + 1;
-                    setTimeout(() => fetchPost(queryText, ref.current), 1000);
-                  }}
-                  hasMore={true}
-                  loader={<h4>Loading...</h4>}
-                >
-                  {post && post.map((pics) => <CardPics {...pics} />)}
-                </InfiniteScroll>
-              </Row>
+              <InfiniteScroll
+                dataLength={post.length}
+                next={() => {
+                  ref.current += 1;
+                  totalPost.current += limit;
+                  setTimeout(() => fetchPost(queryText), 500);
+                }}
+                hasMore={totalPost.current < post.length}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                  <p style={{ textAlign: "center" }}>
+                    <b>Yay! You have seen it all</b>
+                  </p>
+                }
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: "4px",
+                }}
+              >
+                {post.length
+                  ? post.map((pics, index) => (
+                      <CardPics {...pics} index={index} />
+                    ))
+                  : null}
+              </InfiniteScroll>
             </Container>
           </Container>
         </Col>
       </Row>
+      <div className="d-flex d-md-none position-sticky bottom-0 align-items-center justify-content-center bg-white vw-100">
+        <Sidebar flexdir="flex-row" />
+      </div>
     </>
   );
 };

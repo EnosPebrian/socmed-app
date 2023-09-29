@@ -15,9 +15,11 @@ export const Home = () => {
   const [page, setPage] = useState(1);
   const [queryText, setQueryText] = useState("");
   const ref = useRef(1);
-  const fetchPosts = async (queryString = "", page = 1) => {
+  const totalData = useRef(0);
+  const limit = 5;
+  const fetchPosts = async (queryString = "") => {
     await api
-      .get(`/post/q?limit=5&text=${queryText}&page=${page}`)
+      .get(`/post/q?limit=${limit}&text=${queryText}&page=${ref.current}`)
       .then((result) => {
         setPage(result.data.number_of_page);
         setPosts(result.data.data);
@@ -25,12 +27,13 @@ export const Home = () => {
       .catch((err) => console.log(err));
   };
   useEffect(() => {
-    fetchPosts(queryText, page);
+    fetchPosts(queryText);
   }, []);
 
   const handleNext = () => {
-    ref.current += 2;
-    fetchPosts(queryText, ref.current);
+    ref.current += 1;
+    totalData.current += 5;
+    setTimeout(() => fetchPosts(queryText), 1000);
   };
 
   return (
@@ -107,9 +110,9 @@ export const Home = () => {
             </Container>
             <Container className="p-0">
               <InfiniteScroll
-                dataLength={5} //This is important field to render the next data
+                dataLength={posts.length} //This is important field to render the next data
                 next={handleNext}
-                hasMore={ref.current <= page}
+                hasMore={totalData.current < posts.length}
                 loader={<h4>Loading...</h4>}
                 endMessage={
                   <p style={{ textAlign: "center" }}>
@@ -136,6 +139,9 @@ export const Home = () => {
           </Container>
         </Col>
       </Row>
+      <div className="d-flex d-md-none position-sticky bottom-0 align-items-center justify-content-center bg-white vw-100">
+        <Sidebar flexdir="flex-row" />
+      </div>
     </>
   );
 };

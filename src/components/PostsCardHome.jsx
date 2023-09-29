@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { ModalViewComment } from "./ModalViewComment";
 import { useEffect, useRef, useState } from "react";
 import { SVG_Heart, SVG_Heart_Fill } from "./SVG/SVG_heart";
-const avatar_url = process.env.REACT_APP_API_IMAGE_POST_URL;
+const avatar_url = process.env.REACT_APP_API_IMAGE_AVATAR_URL;
+const post_url = process.env.REACT_APP_API_IMAGE_POST_URL;
+const api_url = process.env.REACT_APP_API;
 
 export default function PostsCardHome({ post, index, fetchPosts }) {
   const nav = useNavigate();
@@ -73,20 +75,28 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
               style={{ maxHeight: "41px", aspectRatio: "1/1" }}
             >
               <div>
-                <img
-                  src={avatar_url + post.user.image_url}
-                  alt=""
-                  width="32px"
-                  style={{ borderRadius: "50%" }}
-                  // alt={`avatar-${post.user.username}`}
-                />
+                <a href={`/${post?.user?.username}`}>
+                  <img
+                    src={
+                      api_url +
+                      `user/render_image?username=` +
+                      post.user.username
+                    }
+                    alt=""
+                    width="32px"
+                    style={{ borderRadius: "50%", aspectRatio: "1/1" }}
+                    // alt={`avatar-${post.user.username}`}
+                  />
+                </a>
               </div>
             </div>
             <div className="ml-2 d-flex flex-column">
               <div>
-                <b>{post.user.username}</b>
+                <a href={`/${post?.user?.username}`}>
+                  <b>{post?.user?.username}</b>
+                </a>
               </div>
-              <div>{post.user.bio}</div>
+              <div>{post?.user?.bio ? post?.user?.bio : null}</div>
             </div>
           </div>
           <div style={{ float: "right" }}>
@@ -97,7 +107,7 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
           </div>
         </div>
         <div>
-          <img src={avatar_url + post.image_url} style={{ maxWidth: "100%" }} />
+          <img src={post_url + post.image_url} style={{ maxWidth: "100%" }} />
         </div>
         <div className="d-flex ml-3 my-1 mt-2" style={{ gap: "10px" }}>
           <span onClick={handlelike} className="d-flex">

@@ -10,8 +10,9 @@ import * as Yup from "yup";
 import { userUpdate } from "../redux/middleware/auth-middleware";
 import { renderImage } from "../library/renderImage";
 const avatar_url = process.env.REACT_APP_API_IMAGE_AVATAR_URL;
+const api_url = process.env.REACT_APP_API;
 
-export const ModalEditProfile = ({ setShowModal, show, fetchPost }) => {
+export const ModalEditProfile = ({ setShowModal, show, setAvatar }) => {
   const handleClose = () => {
     setShowModal("");
   };
@@ -21,7 +22,7 @@ export const ModalEditProfile = ({ setShowModal, show, fetchPost }) => {
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      image_url: avatar_url + userSelector?.image_url,
+      image_url: userSelector?.image_url,
       username: userSelector.username,
       fullname: userSelector.fullname,
       bio: userSelector.bio,
@@ -45,6 +46,9 @@ export const ModalEditProfile = ({ setShowModal, show, fetchPost }) => {
             });
         })
         .then(() => {
+          const temp = document.getElementById("avatarImage").src;
+          setAvatar("");
+          setTimeout(() => setAvatar(temp), 1500);
           handleClose();
         })
         .catch((err) =>
@@ -68,7 +72,9 @@ export const ModalEditProfile = ({ setShowModal, show, fetchPost }) => {
           <div className="w-100 d-flex justify-content-center my-3">
             <img
               id="editprofile-avatar"
-              src={formik.values.image_url}
+              src={
+                api_url + `user/render_image?username=` + formik.values.username
+              }
               width={"100px"}
               style={{
                 borderRadius: "50%",
@@ -86,7 +92,7 @@ export const ModalEditProfile = ({ setShowModal, show, fetchPost }) => {
                 accept="image/*"
                 name="image_url"
                 onChange={(e) => {
-                  renderImage(e);
+                  renderImage(e, "editprofile-avatar");
                   formik.setFieldValue(`image_url`, e.target.value);
                   formik.setFieldValue(`image`, e.target.files[0]);
                 }}
