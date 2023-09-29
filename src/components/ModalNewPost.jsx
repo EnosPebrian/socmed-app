@@ -51,10 +51,17 @@ export const ModalNewPost = ({ setShowModal, show, fetchPosts }) => {
 
       try {
         const token = localStorage.getItem("instagram-auth");
-        handleClose();
+        toast({
+          title: "processing",
+          status: "info",
+          duration: 2000,
+          isClosable: true,
+          position: "top",
+        });
         await api.post(`/post/new_post?token=${token}`, formData);
-        ToastSuccess();
-        fetchPosts(1);
+        await fetchPosts();
+        handleClose();
+        return ToastSuccess();
       } catch (err) {
         ToastError("Error on generating new post", err?.response?.data);
       }

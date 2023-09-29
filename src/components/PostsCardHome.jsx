@@ -49,10 +49,16 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
       .then((result) => setLike(result.data.result));
   };
   const islike = async () => {
-    await api
-      .get(`/like/${post.id}?user_id=${userSelector?.id}`)
-      .then((result) => setLike(result.data.result));
-    await api.get;
+    try {
+      await api
+        .get(`/like/${post.id}?user_id=${userSelector?.id}`)
+        .then((result) => setLike(result.data.result));
+      await api
+        .get(`/like/total_like/${post.id}?user_id=${userSelector?.id}`)
+        .then((result) => setTotalLike(result.data.result));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -106,7 +112,7 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
             />
           </div>
         </div>
-        <div>
+        <div onClick={() => setShow("ViewComment")}>
           <img src={post_url + post.image_url} style={{ maxWidth: "100%" }} />
         </div>
         <div className="d-flex ml-3 my-1 mt-2" style={{ gap: "10px" }}>
@@ -125,15 +131,18 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
             src="https://img.icons8.com/?size=1x&id=143&format=png"
             alt="comments icon"
             width={"24px"}
+            onClick={() => setShow("ViewComment")}
           />
-          <img
-            src="https://img.icons8.com/?size=512&id=2837&format=png"
-            alt="paper plane icon"
-            width={"24px"}
-          />
+          <a href={`/message/${post?.user?.username}`}>
+            <img
+              src="https://img.icons8.com/?size=512&id=2837&format=png"
+              alt="paper plane icon"
+              width={"24px"}
+            />
+          </a>
         </div>
         <div className="mr-3 my-1">
-          Liked by <b>{`aneh`}</b> and <b>{`10,000`} others</b>
+          Liked by <b>{totalLike.toLocaleString(`id-ID`)} others</b>
         </div>
         <div className="mr-3 my-1">
           <b>{post?.user?.username}</b>
