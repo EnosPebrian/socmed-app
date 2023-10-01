@@ -4,7 +4,7 @@ import * as YupPassword from "yup-password";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
 import { Card, Container, Form } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SVGeyePassword } from "../components/SVG/SVG_eye_password";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../redux/middleware/auth-middleware";
@@ -170,6 +170,10 @@ export const Login = () => {
       });
     },
   });
+
+  useEffect(() => {
+    if (localStorage.getItem(`instagram-auth`)) navigate(`/home`);
+  }, []);
 
   return (
     <>

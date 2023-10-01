@@ -3,9 +3,11 @@ import { ModalNewPost } from "./ModalNewPost";
 import { SVGinstagram } from "./SVG/SVG_Instagram";
 import { SVG_logoInstagram } from "./SVG/SVG_logo_Instagram";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
   const [showModal, setShowModal] = useState("");
+  const nav = useNavigate();
   const userSelector = useSelector((state) => state.auth);
 
   return (
@@ -88,7 +90,10 @@ export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
             src="https://img.icons8.com/?size=512&id=37787&format=png"
             alt="plus icon"
             width={"24px"}
-            onClick={() => setShowModal("OpenModalNewPost")}
+            onClick={() => {
+              if (!localStorage.getItem("instagram-auth")) return nav("/login");
+              setShowModal("OpenModalNewPost");
+            }}
           />
           <span className="d-none d-xxl-block">Create</span>
         </div>

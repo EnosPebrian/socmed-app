@@ -81,7 +81,7 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
               style={{ maxHeight: "41px", aspectRatio: "1/1" }}
             >
               <div>
-                <a href={`/${post?.user?.username}`}>
+                <a href={`/${post?.user?.username}`} type="button">
                   <img
                     src={
                       api_url +
@@ -112,7 +112,7 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
             />
           </div>
         </div>
-        <div onClick={() => setShow("ViewComment")}>
+        <div onClick={() => setShow("ViewComment")} type="button">
           <img src={post_url + post.image_url} style={{ maxWidth: "100%" }} />
         </div>
         <div className="d-flex ml-3 my-1 mt-2" style={{ gap: "10px" }}>

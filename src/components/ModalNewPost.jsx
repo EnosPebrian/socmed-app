@@ -7,8 +7,10 @@ import { useToast } from "@chakra-ui/react";
 import { renderImage } from "../library/renderImage";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 export const ModalNewPost = ({ setShowModal, show, fetchPosts }) => {
+  const nav = useNavigate();
   const handleClose = () => {
     setShowModal("");
   };
@@ -43,6 +45,7 @@ export const ModalNewPost = ({ setShowModal, show, fetchPosts }) => {
       image_url: Yup.string().required("must not empty"),
     }),
     onSubmit: async (values) => {
+      if (!localStorage.getItem("instagram-auth")) nav("/login");
       values.user_id = userSelector?.id;
       const formData = new FormData();
       Object.entries(values).forEach((value) => {
