@@ -5,12 +5,12 @@ const init_state = {
 };
 
 export const userReducer = (state = init_state, action) => {
-  if (action.type == types.login) {
+  if (action.type === types.login) {
     return {
       ...state,
       ...action.payload,
     };
-  } else if (action.type == types.logout) {
+  } else if (action.type === types.logout) {
     return init_state;
   }
   return state;

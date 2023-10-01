@@ -46,7 +46,11 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
     if (!userSelector?.id) return nav(`/login`);
     await api
       .post(`/like/${post.id}`, { user_id: userSelector?.id })
-      .then((result) => setLike(result.data.result));
+      .then((result) => {
+        setLike(result.data.result);
+        if (result.data.result) setTotalLike(totalLike + 1);
+        else setTotalLike(totalLike - 1);
+      });
   };
   const islike = async () => {
     try {
@@ -55,7 +59,10 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
         .then((result) => setLike(result.data.result));
       await api
         .get(`/like/total_like/${post.id}?user_id=${userSelector?.id}`)
-        .then((result) => setTotalLike(result.data.result));
+        .then((result) => {
+          console.log(result, `totallike`);
+          setTotalLike(result.data.result);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -77,10 +84,10 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
         <div className="d-flex align-items-center justify-content-between w-100 mb-2">
           <div className="d-flex align-items-center w-100">
             <div
-              className={`rounded-circle border border-secondary`}
-              style={{ maxHeight: "41px", aspectRatio: "1/1" }}
+              className={`rounded-circle border border-secondary d-flex align-items-center justify-content-center`}
+              style={{ height: "41px", aspectRatio: "1/1" }}
             >
-              <div>
+              <div className="d-flex">
                 <a href={`/${post?.user?.username}`} type="button">
                   <img
                     src={
@@ -115,32 +122,34 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
         <div onClick={() => setShow("ViewComment")} type="button">
           <img src={post_url + post.image_url} style={{ maxWidth: "100%" }} />
         </div>
-        <div className="d-flex ml-3 my-1 mt-2" style={{ gap: "10px" }}>
-          <span onClick={handlelike} className="d-flex">
-            {like ? (
-              <span type="button" className="text-danger">
-                <SVG_Heart_Fill />
-              </span>
-            ) : (
-              <span type="button">
-                <SVG_Heart />
-              </span>
-            )}
-          </span>
-          <img
-            src="https://img.icons8.com/?size=1x&id=143&format=png"
-            alt="comments icon"
-            width={"24px"}
-            onClick={() => setShow("ViewComment")}
-          />
-          <a href={`/message/${post?.user?.username}`}>
+        {userSelector?.username === post?.user?.username ? null : (
+          <div className="d-flex ml-3 my-1 mt-2" style={{ gap: "10px" }}>
+            <span onClick={handlelike} className="d-flex">
+              {like ? (
+                <span type="button" className="text-danger">
+                  <SVG_Heart_Fill />
+                </span>
+              ) : (
+                <span type="button">
+                  <SVG_Heart />
+                </span>
+              )}
+            </span>
             <img
-              src="https://img.icons8.com/?size=512&id=2837&format=png"
-              alt="paper plane icon"
+              src="https://img.icons8.com/?size=1x&id=143&format=png"
+              alt="comments icon"
               width={"24px"}
+              onClick={() => setShow("ViewComment")}
             />
-          </a>
-        </div>
+            <a href={`/message/${post?.user?.username}`}>
+              <img
+                src="https://img.icons8.com/?size=512&id=2837&format=png"
+                alt="paper plane icon"
+                width={"24px"}
+              />
+            </a>
+          </div>
+        )}
         <div className="mr-3 my-1">
           Liked by <b>{totalLike.toLocaleString(`id-ID`)} others</b>
         </div>

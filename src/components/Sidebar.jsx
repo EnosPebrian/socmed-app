@@ -4,6 +4,7 @@ import { SVGinstagram } from "./SVG/SVG_Instagram";
 import { SVG_logoInstagram } from "./SVG/SVG_logo_Instagram";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { SVG_message } from "./SVG/SVG_message";
 
 export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
   const [showModal, setShowModal] = useState("");
@@ -82,9 +83,18 @@ export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
           />
           <span className="d-none d-xxl-block">Profile</span>
         </a>
+        <a
+          href="/message_room"
+          className="d-flex align-items-center pl-2 gap-2"
+          style={{ height: "50px" }}
+        >
+          <SVG_message />
+          <span className="d-none d-xxl-block">Messages</span>
+        </a>
         <div
           className="d-flex align-items-center pl-2 gap-2"
           style={{ height: "50px" }}
+          type="button"
         >
           <img
             src="https://img.icons8.com/?size=512&id=37787&format=png"

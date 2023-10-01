@@ -57,7 +57,12 @@ export const Home = () => {
           xl={11}
           lg={11}
           md={11}
-          style={{ padding: "0", display: "flex", justifyContent: "center" }}
+          style={{
+            padding: "0",
+            display: "flex",
+            justifyContent: "center",
+            minHeight: "95vh",
+          }}
         >
           <Container className="p-0" style={{ maxWidth: "975px" }}>
             <Container

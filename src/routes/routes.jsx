@@ -3,6 +3,7 @@ import { Forgot_password } from "../pages/ForgotPasswordSubmission";
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { Message } from "../pages/Message";
+import { MessageRoom } from "../pages/MessageRoom";
 import { Profile } from "../pages/Profile";
 import { Register } from "../pages/Register";
 import { ResetPassword } from "../pages/ResetPassword";
@@ -25,6 +26,7 @@ export const routes = [
   new RouteClass("/verify/:user_id/:token", <Verify />),
   new RouteClass("/reset_password/:token", <ResetPassword />),
   new RouteClass("/forgot_password", <Forgot_password />),
-  new RouteClass("/:username", <Profile />),
+  new RouteClass("/message_room", <MessageRoom />),
   new RouteClass("/message/:username", <Message />),
+  new RouteClass("/:username", <Profile />),
 ];
