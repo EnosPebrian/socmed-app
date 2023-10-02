@@ -2,20 +2,33 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import { topnav } from "../components/SVG/SVGReels and photo";
 import { useEffect, useRef, useState } from "react";
 import { api } from "../json-server/api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FetchStory from "../components/FetchStory";
 import Sidebar from "../components/Sidebar";
 import { SVG_setting } from "../components/SVG/SVG_setting";
 import { ModalEditProfile } from "../components/ModalEditProfile";
 import { useNavigate, useParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { ModalViewComment } from "../components/ModalViewComment";
+import { userLogout } from "../redux/middleware/auth-middleware";
+import { useToast } from "@chakra-ui/react";
+import { SVGinstagram } from "../components/SVG/SVG_Instagram";
+
 const avatar_url = process.env.REACT_APP_API_IMAGE_AVATAR_URL;
 const post_url = process.env.REACT_APP_API_IMAGE_POST_URL;
 const api_url = process.env.REACT_APP_API;
 
 export const CardPics = (props) => {
+  const [show, setShow] = useState("");
+
   return (
-    <div className="p-0 m-0" key={`cardpics-` + props.index}>
+    <div
+      className="p-0 m-0"
+      key={`cardpics-` + props.index}
+      onClick={() => setShow("ViewComment")}
+      type="button"
+    >
+      <ModalViewComment post={props} show={show} setShow={setShow} />
       <img
         src={post_url + props?.image_url}
         alt={props.caption}
@@ -30,6 +43,7 @@ export const CardPics = (props) => {
 
 export const Profile = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
   const { username } = useParams();
   const [post, setPost] = useState([]);
   const userSelector = useSelector((state) => state.auth);
@@ -40,6 +54,8 @@ export const Profile = () => {
   const [showModal, setShowModal] = useState("");
   const [avatar, setAvatar] = useState("");
   const [isFollow, setIsFollow] = useState(false);
+  const [showSetting, setShowSetting] = useState(false);
+  const toast = useToast();
 
   const fetchPost = async () => {
     await api
@@ -80,6 +96,21 @@ export const Profile = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const resendVerifLink = () => {
+    api
+      .post(`/user/resend_verification_link/${userSelector.id}`, {})
+      .then(() =>
+        toast({
+          title: "success",
+          description: "a new verification email has been sent",
+          duration: 3000,
+          isClosable: true,
+          status: "success",
+        })
+      )
+      .catch((err) => console.log(err?.message));
   };
 
   useEffect(() => {
@@ -133,6 +164,34 @@ export const Profile = () => {
             }}
           >
             <Container style={{ maxWidth: "975px", padding: "0" }}>
+              <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
+                <div>
+                  <SVGinstagram />
+                </div>
+                <div className="d-flex flex-row" style={{ gap: "20px" }}>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=FFls4U4qS13I&format=png"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=lFyaayFdhpED&format=gif"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=512&id=20202&format=png"
+                      alt="messanger logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                </div>
+              </div>
               <div className="my-4">
                 <Row style={{ margin: "0" }}>
                   <Col
@@ -154,6 +213,7 @@ export const Profile = () => {
                           src={avatar}
                           style={{
                             maxWidth: "140px",
+                            width: "140px",
                             aspectRatio: "1/1",
                             objectFit: "cover",
                             borderRadius: "50%",
@@ -178,12 +238,48 @@ export const Profile = () => {
                           <Button
                             variant="secondary"
                             onClick={() => setShowModal("OpenModalEditProfile")}
+                            style={{ fontSize: "calc(10px + 0.2vw)" }}
                           >
                             Edit Profile
                           </Button>
-                          <Button variant="secondary">View Archive</Button>
-                          <div>
+                          <Button
+                            variant="secondary"
+                            style={{ fontSize: "calc(10px + 0.2vw)" }}
+                          >
+                            View Archive
+                          </Button>
+                          <div
+                            type="button"
+                            onClick={() => setShowSetting(!showSetting)}
+                            className="position-relative"
+                          >
                             <SVG_setting />
+                            {showSetting ? (
+                              <div
+                                className="position-absolute bg-white d-flex flex-column p-2 gap-2"
+                                style={{ right: "0px" }}
+                              >
+                                <div
+                                  onClick={() => {
+                                    dispatch(userLogout());
+                                    return nav(`/home`);
+                                  }}
+                                  className="rounded-pill border border-dark"
+                                  style={{ width: "100px", padding: "0 4px" }}
+                                >
+                                  Log out
+                                </div>
+                                {userSelector.is_verified ? null : (
+                                  <div
+                                    className="px-1 rounded-pill border border-dark"
+                                    type="button"
+                                    onClick={resendVerifLink}
+                                  >
+                                    Verify
+                                  </div>
+                                )}
+                              </div>
+                            ) : null}
                           </div>
                         </>
                       ) : (

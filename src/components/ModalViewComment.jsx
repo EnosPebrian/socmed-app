@@ -1,25 +1,30 @@
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { api } from "../json-server/api";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import { CommentLine } from "./commentLine";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+const post_url = process.env.REACT_APP_API_IMAGE_POST_URL;
+const api_url = process.env.REACT_APP_API;
 
-export const ModalViewComment = ({
-  post,
-  setShow,
-  show,
-  fetchComment,
-  totalComments,
-  totalLike,
-  comments,
-  page,
-  userSelector,
-  totalPage,
-}) => {
+export const ModalViewComment = ({ post, setShow, show, totalLike, page }) => {
+  const userSelector = useSelector((state) => state.auth);
   const [index, setIndex] = useState(0);
   const nav = useNavigate();
   const ref = useRef(page);
+  const [comments, setComments] = useState([]);
+  const [totalPage, setTotalPage] = useState(1);
+  const [totalComments, setTotalComments] = useState(0);
+  console.log(post);
+
+  const fetchComment = async (page = 1) => {
+    await api.get(`/comment/${post.id}?page=${page}`).then((result) => {
+      setComments(result.data.data);
+      setTotalComments(result.data.total_comments);
+      setTotalPage(result.data.number_of_page);
+    });
+  };
 
   const handleSelect = (selectedIndex) => {
     setIndex(selectedIndex);
@@ -45,17 +50,19 @@ export const ModalViewComment = ({
     document.getElementById(`comment-modal-${post.id}`).value = "";
   };
 
+  useEffect(() => {
+    fetchComment(1);
+  }, []);
   return (
     <Container>
       <Modal show={show === "ViewComment"} size="xl" onHide={handleClose}>
         <Row className="m-0">
-          <Col lg={6} className="p-0">
+          <Col lg={6} className="p-0 position relative">
+            <Modal.Header closeButton />
             <Carousel activeIndex={index} onSelect={handleSelect}>
               <Carousel.Item className="d-flex justify-content-center">
                 <img
-                  src={
-                    "https://www.nature.com/immersive/d41586-021-00095-y/assets/3TP4N718ac/2021-01-xx_jan-iom_tree-of-life_sh-750x1000.jpeg"
-                  }
+                  src={post_url + post?.image_url}
                   style={{ maxHeight: "700px" }}
                 />
               </Carousel.Item>
@@ -72,18 +79,37 @@ export const ModalViewComment = ({
               <div className="d-flex align-items-center w-100">
                 <div
                   className={`rounded-circle border border-secondary`}
-                  style={{ maxHeight: "41px", aspectRatio: "1/1" }}
+                  style={{
+                    maxWidth: "32px",
+                    width: "32px",
+                    maxHeight: "32px",
+                    aspectRatio: "1/1",
+                  }}
                 >
-                  <div>
+                  <div
+                    style={{
+                      maxWidth: "32px",
+                      width: "32px",
+                      aspectRatio: "1/1",
+                    }}
+                  >
                     <img
-                      src={post.user.image_url}
-                      alt="question mark"
-                      width={"32px"}
+                      src={
+                        api_url +
+                        `user/render_image?username=` +
+                        post?.user?.username
+                      }
+                      alt={"img-" + post?.user?.username}
+                      style={{
+                        maxWidth: "32px",
+                        width: "32px",
+                        aspectRatio: "1/1",
+                      }}
                     />
                   </div>
                 </div>
                 <div className="mx-3">
-                  <b>{post.user.username}</b>
+                  <b>{post?.user?.username}</b>
                 </div>
               </div>
               <div style={{ float: "right" }}>
@@ -98,12 +124,12 @@ export const ModalViewComment = ({
               style={{ maxHeight: "600px", overflowY: "auto" }}
               className="hideScroll"
             >
-              {comments.map((comment, index) => (
+              {comments?.map((comment, index) => (
                 <CommentLine comment={comment} index={index} />
               ))}
             </div>
             <div className="d-flex justify-content-center">
-              {ref.current <= totalPage ? (
+              {ref.current <= totalPage && totalPage > 1 ? (
                 <span
                   type="button"
                   onClick={() => {

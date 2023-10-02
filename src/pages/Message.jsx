@@ -182,6 +182,9 @@ export const Message = () => {
                   id="chat-input"
                   placeholder="..."
                   className="w-100 px-3"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSendMessage();
+                  }}
                 />
               </Col>
               <Col xs={`auto`} className="p-0">

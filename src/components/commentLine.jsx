@@ -1,5 +1,6 @@
 import { Avatar, border } from "@chakra-ui/react";
 import { SVG_Heart } from "./SVG/SVG_heart";
+const api_url = process.env.REACT_APP_API;
 
 export const CommentLine = ({ comment, index }) => {
   return (
@@ -10,15 +11,17 @@ export const CommentLine = ({ comment, index }) => {
     >
       <div className="mx-3" style={{ minWidth: "32px" }}>
         <img
-          src={comment.users.image_url}
-          style={{ width: "32px", borderRadius: "50%" }}
+          src={
+            api_url + `user/render_image?username=` + comment?.users?.username
+          }
+          style={{ width: "32px", borderRadius: "50%", aspectRatio: "1/1" }}
         />
       </div>
-      <div style={{ marginLeft: "16px" }}>
+      <div style={{ marginLeft: "16px" }} className="pt-1">
         <span style={{ wordBreak: "break-all" }}>
-          <b>{comment.users.username}</b>
+          <b>{comment?.users?.username}</b>
           {"    "}
-          {comment.comment}
+          {comment?.comment}
         </span>
       </div>
       <div className="d-flex justify-content-center align-items-center">

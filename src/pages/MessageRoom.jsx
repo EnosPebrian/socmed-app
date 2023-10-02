@@ -17,7 +17,24 @@ export const MessageRoom = () => {
   const fetchMessageRoom = async () => {
     try {
       const { data } = await api.get(`/message/chatroom/` + userSelector.id);
-      setRoomList(data);
+      // setRoomList(data);
+      const temp = new Set();
+      const temp2 = [];
+      data.forEach((val) => {
+        if (
+          temp.has(
+            `room_` +
+              [val.user_sender_id, val.user_receiver_id].sort((a, b) => a - b)
+          )
+        )
+          return;
+        temp.add(
+          `room_` +
+            [val.user_sender_id, val.user_receiver_id].sort((a, b) => a - b)
+        );
+        temp2.push(val);
+      });
+      setRoomList(temp2);
     } catch (err) {
       console.log(err);
     }
@@ -63,56 +80,84 @@ export const MessageRoom = () => {
             minHeight: "95vh",
           }}
         >
-          {roomList.length &&
-            roomList.map((room, idx) => (
-              <Card
-                style={{
-                  maxWidth: "300px",
-                  width: "100%",
-                  paddingTop: "10px",
-                }}
-              >
-                <Card.Header>Your Chat Room</Card.Header>
-                <Card>
-                  <a
-                    href={`/message/${room?.user_receivers?.username}`}
-                    className="d-flex align-items-center gap-2 px-2 py-2 position-relative"
-                  >
-                    <div className="d-flex align-items-center justify-content-center">
-                      <img
-                        src={
-                          api_url +
-                          `user/render_image?username=` +
-                          room?.user_receivers?.username
-                        }
-                        alt={`avatar-` + room?.user_receivers?.username}
-                        style={{
-                          borderRadius: "50%",
-                          aspectRatio: "1/1",
-                          width: "32px",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </div>
-                    <div>{room?.user_receivers?.username}</div>
-                    <span
-                      className="text-danger position-absolute"
-                      style={{
-                        right: "10px",
-                        display: notification.has(room?.user_receiver_id)
-                          ? "block"
-                          : "none",
-                      }}
-                      onClick={() =>
-                        notification.delete(room?.user_receiver_id)
-                      }
+          <Card>
+            <Card.Header>Your Chat Room</Card.Header>
+            {roomList.length &&
+              roomList.map((room, idx) => (
+                <Card
+                  style={{
+                    maxWidth: "600px",
+                    width: "100vw",
+                    paddingTop: "10px",
+                  }}
+                >
+                  <Card>
+                    <a
+                      href={`/message/${
+                        room?.user_receivers?.username === userSelector.username
+                          ? room?.user_senders?.username
+                          : room?.user_receivers?.username
+                      }`}
+                      className="d-flex align-items-center gap-2 px-2 py-2 position-relative"
                     >
-                      <SVG_chatDotFill />
-                    </span>
-                  </a>
+                      <div className="d-flex align-items-center justify-content-center">
+                        <img
+                          src={
+                            api_url +
+                            `user/render_image?username=${
+                              room?.user_receivers?.username ===
+                              userSelector.username
+                                ? room?.user_senders?.username
+                                : room?.user_receivers?.username
+                            }`
+                          }
+                          alt={`avatar-${
+                            room?.user_receivers?.username ===
+                            userSelector.username
+                              ? room?.user_senders?.username
+                              : room?.user_receivers?.username
+                          }`}
+                          style={{
+                            borderRadius: "50%",
+                            aspectRatio: "1/1",
+                            width: "32px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </div>
+                      <div>
+                        {room?.user_receivers?.username ===
+                        userSelector.username
+                          ? room?.user_senders?.username
+                          : room?.user_receivers?.username}
+                      </div>
+                      <span
+                        className="text-danger position-absolute"
+                        style={{
+                          right: "10px",
+                          display: notification.has(
+                            room?.user_receiver_id === userSelector.id
+                              ? room?.user_sender_id
+                              : room?.user_receiver_id
+                          )
+                            ? "block"
+                            : "none",
+                        }}
+                        onClick={() =>
+                          notification.delete(
+                            room?.user_receiver_id === userSelector.id
+                              ? room?.user_sender_id
+                              : room?.user_receiver_id
+                          )
+                        }
+                      >
+                        <SVG_chatDotFill />
+                      </span>
+                    </a>
+                  </Card>
                 </Card>
-              </Card>
-            ))}
+              ))}
+          </Card>
         </Col>
       </Row>
       <div className="d-flex d-md-none position-sticky bottom-0 align-items-center justify-content-center bg-white vw-100">

@@ -18,7 +18,14 @@ export const userLogin = (values) => {
 };
 
 export const userLogout = () => {
-  return async (dispatch) => {};
+  return async (dispatch) => {
+    try {
+      await dispatch({ type: types.logout });
+      localStorage.removeItem("instagram-auth");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 };
 
 export const userUpdate = (id, values) => {

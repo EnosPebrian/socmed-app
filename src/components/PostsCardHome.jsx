@@ -19,7 +19,7 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
   const [totalLike, setTotalLike] = useState(0);
   const [totalComments, setTotalComments] = useState(0);
   const userSelector = useSelector((state) => state.auth);
-  const fetchComment = async (page = 0) => {
+  const fetchComment = async (page = 1) => {
     await api.get(`/comment/${post.id}?page=${page}`).then((result) => {
       setComments(result.data.data);
       setTotalComments(result.data.total_comments);
