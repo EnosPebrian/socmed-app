@@ -118,7 +118,7 @@ export const Message = () => {
             >
               <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
                 <div>
-                  <img src={logo} style={{ maxHeight: "50px" }} />
+                  <img src={logo} style={{ maxHeight: "50px" }} alt='logo'/>
                 </div>
                 <div className="d-flex flex-row" style={{ gap: "20px" }}>
                   <a>

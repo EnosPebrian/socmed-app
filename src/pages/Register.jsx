@@ -1,4 +1,4 @@
-import { SVGinstagram } from "../components/SVG/SVG_Instagram";
+import logo from "../asset/RepligramLogo.png";
 import * as Yup from "yup";
 import * as YupPassword from "yup-password";
 import { useFormik } from "formik";
@@ -97,7 +97,7 @@ export const Register = () => {
             borderRadius: "30px",
           }}
         >
-          <SVGinstagram />
+          <img src={logo} style={{ maxHeight: "85px" }} alt="logo" />
           <Form className="mt-5 w-100" style={{ maxWidth: "320px" }}>
             <Form.Group className="mb-3" controlId="email">
               <Form.Control
