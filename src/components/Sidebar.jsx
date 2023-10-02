@@ -86,7 +86,10 @@ export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
                       }}
                     />
                   </span>
-                  <span>{acc?.username}</span>
+                  <span>
+                    {`${acc?.username}` +
+                      `${acc?.fullname ? " (" + acc?.fullname + ")" : ""}`}
+                  </span>
                 </a>
               ))}
           </div>
