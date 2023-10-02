@@ -66,7 +66,7 @@ export const ModalEditProfile = ({ setShowModal, show, setAvatar }) => {
     <>
       <Modal show={show === "OpenModalEditProfile"} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="w-100 d-flex justify-content-center my-3">

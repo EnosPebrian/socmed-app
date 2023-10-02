@@ -75,7 +75,7 @@ export const ModalNewPost = ({ setShowModal, show, fetchPosts }) => {
     <>
       <Modal show={show === "OpenModalNewPost"} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Create a New Post</Modal.Title>
         </Modal.Header>
         <img src="" alt="" id="modal-new-post" />
         <Modal.Body>

@@ -93,10 +93,14 @@ export const Message = () => {
           xl={11}
           lg={11}
           md={11}
-          style={{ padding: "0", display: "flex", justifyContent: "center" }}
+          style={{
+            padding: "0",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
           <div
-            className="d-grid"
+            className="d-grid border-start"
             style={{
               gridTemplateRows: "auto auto 1fr auto",
               height: "97vh",
