@@ -12,7 +12,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { ModalViewComment } from "../components/ModalViewComment";
 import { userLogout } from "../redux/middleware/auth-middleware";
 import { useToast } from "@chakra-ui/react";
-import { SVGinstagram } from "../components/SVG/SVG_Instagram";
+
+import logo from "../asset/RepligramLogo.png";
 
 const avatar_url = process.env.REACT_APP_API_IMAGE_AVATAR_URL;
 const post_url = process.env.REACT_APP_API_IMAGE_POST_URL;
@@ -155,18 +156,18 @@ export const Profile = () => {
             minHeight: "95vh",
           }}
         >
-          <Container
-            style={{
-              padding: "0",
-              margin: "0",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Container style={{ maxWidth: "975px", padding: "0" }}>
+          <Container style={{ maxWidth: "975px", padding: "0" }}>
+            <Container
+              style={{
+                position: "sticky",
+                top: "0px",
+                backgroundColor: "white",
+                zIndex: 2,
+              }}
+            >
               <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
                 <div>
-                  <SVGinstagram />
+                  <img src={logo} style={{ maxHeight: "50px" }} />
                 </div>
                 <div className="d-flex flex-row" style={{ gap: "20px" }}>
                   <a>
@@ -192,174 +193,174 @@ export const Profile = () => {
                   </a>
                 </div>
               </div>
-              <div className="my-4">
-                <Row style={{ margin: "0" }}>
-                  <Col
-                    md={3}
-                    lg={4}
-                    className="d-flex justify-content-center p-0"
+            </Container>
+            <div className="my-4">
+              <Row style={{ margin: "0" }}>
+                <Col
+                  md={3}
+                  lg={4}
+                  className="d-flex justify-content-center p-0"
+                >
+                  <div
+                    className="d-flex justify-content-center align-items-center border border-seconndary"
+                    style={{
+                      borderRadius: "100%",
+                      maxWidth: "150px",
+                      aspectRatio: "1/1",
+                    }}
+                  >
+                    <div>
+                      <img
+                        id="avatarImage"
+                        src={avatar}
+                        style={{
+                          maxWidth: "140px",
+                          width: "140px",
+                          aspectRatio: "1/1",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </Col>
+                <Col>
+                  <div
+                    className="d-flex align-items-center"
+                    style={{ height: "40px", gap: "10px" }}
                   >
                     <div
-                      className="d-flex justify-content-center align-items-center border border-seconndary"
-                      style={{
-                        borderRadius: "100%",
-                        maxWidth: "150px",
-                        aspectRatio: "1/1",
-                      }}
-                    >
-                      <div>
-                        <img
-                          id="avatarImage"
-                          src={avatar}
-                          style={{
-                            maxWidth: "140px",
-                            width: "140px",
-                            aspectRatio: "1/1",
-                            objectFit: "cover",
-                            borderRadius: "50%",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </Col>
-                  <Col>
-                    <div
                       className="d-flex align-items-center"
-                      style={{ height: "40px", gap: "10px" }}
+                      style={{ height: "40px" }}
                     >
-                      <div
-                        className="d-flex align-items-center"
-                        style={{ height: "40px" }}
-                      >
-                        {userSelector?.username}
-                      </div>
-                      {userSelector?.username === username ? (
-                        <>
-                          <Button
-                            variant="secondary"
-                            onClick={() => setShowModal("OpenModalEditProfile")}
-                            style={{ fontSize: "calc(10px + 0.2vw)" }}
-                          >
-                            Edit Profile
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            style={{ fontSize: "calc(10px + 0.2vw)" }}
-                          >
-                            View Archive
-                          </Button>
-                          <div
-                            type="button"
-                            onClick={() => setShowSetting(!showSetting)}
-                            className="position-relative"
-                          >
-                            <SVG_setting />
-                            {showSetting ? (
+                      {userSelector?.username}
+                    </div>
+                    {userSelector?.username === username ? (
+                      <>
+                        <Button
+                          variant="secondary"
+                          onClick={() => setShowModal("OpenModalEditProfile")}
+                          style={{ fontSize: "calc(10px + 0.2vw)" }}
+                        >
+                          Edit Profile
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          style={{ fontSize: "calc(10px + 0.2vw)" }}
+                        >
+                          View Archive
+                        </Button>
+                        <div
+                          type="button"
+                          onClick={() => setShowSetting(!showSetting)}
+                          className="position-relative"
+                        >
+                          <SVG_setting />
+                          {showSetting ? (
+                            <div
+                              className="position-absolute bg-white d-flex flex-column p-2 gap-2"
+                              style={{ right: "0px" }}
+                            >
                               <div
-                                className="position-absolute bg-white d-flex flex-column p-2 gap-2"
-                                style={{ right: "0px" }}
+                                onClick={() => {
+                                  dispatch(userLogout());
+                                  return nav(`/home`);
+                                }}
+                                className="rounded-pill border border-dark"
+                                style={{ width: "100px", padding: "0 4px" }}
                               >
-                                <div
-                                  onClick={() => {
-                                    dispatch(userLogout());
-                                    return nav(`/home`);
-                                  }}
-                                  className="rounded-pill border border-dark"
-                                  style={{ width: "100px", padding: "0 4px" }}
-                                >
-                                  Log out
-                                </div>
-                                {userSelector.is_verified ? null : (
-                                  <div
-                                    className="px-1 rounded-pill border border-dark"
-                                    type="button"
-                                    onClick={resendVerifLink}
-                                  >
-                                    Verify
-                                  </div>
-                                )}
+                                Log out
                               </div>
-                            ) : null}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <Button variant="secondary" onClick={handleFolow}>
-                            {isFollow ? "Unfollow" : "Follow"}
-                          </Button>
-                          <Button variant="secondary">
-                            <a href={`/message/${username}`}>Send Message</a>
-                          </Button>
-                        </>
-                      )}
+                              {userSelector.is_verified ? null : (
+                                <div
+                                  className="px-1 rounded-pill border border-dark"
+                                  type="button"
+                                  onClick={resendVerifLink}
+                                >
+                                  Verify
+                                </div>
+                              )}
+                            </div>
+                          ) : null}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Button variant="secondary" onClick={handleFolow}>
+                          {isFollow ? "Unfollow" : "Follow"}
+                        </Button>
+                        <Button variant="secondary">
+                          <a href={`/message/${username}`}>Send Message</a>
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                  <div className="d-flex" style={{ gap: "15px" }}>
+                    <div className="d-flex">
+                      <span>6 </span>
+                      <span style={{ marginLeft: "4px" }}>posts</span>
                     </div>
-                    <div className="d-flex" style={{ gap: "15px" }}>
-                      <div className="d-flex">
-                        <span>6 </span>
-                        <span style={{ marginLeft: "4px" }}>posts</span>
-                      </div>
-                      <div className="d-flex">
-                        <span>11</span>
-                        <span style={{ marginLeft: "4px" }}>followers</span>
-                      </div>
-                      <div className="d-flex">
-                        <span>121</span>
-                        <span style={{ marginLeft: "4px" }}>following</span>
-                      </div>
+                    <div className="d-flex">
+                      <span>11</span>
+                      <span style={{ marginLeft: "4px" }}>followers</span>
                     </div>
-                    <div className="mt-3">Satu persatu tapi pasti</div>
-                    <div>Growing gradually</div>
-                  </Col>
-                </Row>
-              </div>
-              <div
-                id="story-container"
-                className="d-flex flex-row my-3 p-0"
+                    <div className="d-flex">
+                      <span>121</span>
+                      <span style={{ marginLeft: "4px" }}>following</span>
+                    </div>
+                  </div>
+                  <div className="mt-3">Satu persatu tapi pasti</div>
+                  <div>Growing gradually</div>
+                </Col>
+              </Row>
+            </div>
+            <div
+              id="story-container"
+              className="d-flex flex-row my-3 p-0"
+              style={{
+                gap: "30px",
+                overflowX: "scroll",
+                maxWidth: "100%",
+              }}
+            >
+              <FetchStory />
+            </div>
+            <div
+              id="posts-reels-tags-container"
+              className="d-flex justify-content-center"
+              style={{ height: "52px", gap: "20px" }}
+            >
+              {topnav.map((item) => (
+                <Option {...item}></Option>
+              ))}
+            </div>
+            <div>
+              <InfiniteScroll
                 style={{
-                  gap: "30px",
-                  overflowX: "scroll",
-                  maxWidth: "100%",
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: "4px",
+                  justifyItems: "center",
                 }}
+                dataLength={post.length} //This is important field to render the next data
+                next={() => {
+                  page.current = page.current + 1;
+                  totaldata.current += limit;
+                  fetchPost();
+                }}
+                hasMore={totaldata.current < post.length}
+                loader={<h4>Loading...</h4>}
+                endMessage={
+                  <p style={{ textAlign: "center" }}>
+                    <b>Yay! You have seen it all</b>
+                  </p>
+                }
               >
-                <FetchStory />
-              </div>
-              <div
-                id="posts-reels-tags-container"
-                className="d-flex justify-content-center"
-                style={{ height: "52px", gap: "20px" }}
-              >
-                {topnav.map((item) => (
-                  <Option {...item}></Option>
+                {post.map((pics) => (
+                  <CardPics {...pics} />
                 ))}
-              </div>
-              <div>
-                <InfiniteScroll
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr",
-                    gap: "4px",
-                    justifyItems: "center",
-                  }}
-                  dataLength={post.length} //This is important field to render the next data
-                  next={() => {
-                    page.current = page.current + 1;
-                    totaldata.current += limit;
-                    fetchPost();
-                  }}
-                  hasMore={totaldata.current < post.length}
-                  loader={<h4>Loading...</h4>}
-                  endMessage={
-                    <p style={{ textAlign: "center" }}>
-                      <b>Yay! You have seen it all</b>
-                    </p>
-                  }
-                >
-                  {post.map((pics) => (
-                    <CardPics {...pics} />
-                  ))}
-                </InfiniteScroll>
-              </div>
-            </Container>
+              </InfiniteScroll>
+            </div>
           </Container>
         </Col>
       </Row>

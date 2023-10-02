@@ -16,7 +16,6 @@ export const ModalViewComment = ({ post, setShow, show, totalLike, page }) => {
   const [comments, setComments] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const [totalComments, setTotalComments] = useState(0);
-  console.log(post);
 
   const fetchComment = async (page = 1) => {
     await api.get(`/comment/${post.id}?page=${page}`).then((result) => {

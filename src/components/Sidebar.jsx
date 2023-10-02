@@ -9,6 +9,7 @@ import { API_URL, api } from "../json-server/api";
 import { io } from "socket.io-client";
 import { SVG_chatDotFill } from "./SVG/SVG_cat_dot_fill";
 import { SVG_compass } from "./SVG/SVG_compass";
+import logo from "../asset/RepligramLogo.png";
 const socketConnection = io(API_URL);
 const api_url = process.env.REACT_APP_API;
 
@@ -109,7 +110,7 @@ export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
           <div className="my-4">
             <SVG_logoInstagram />
             <div className="d-none d-xxl-block">
-              <SVGinstagram />
+              <img src={logo} style={{ maxHeight: "50px" }} />
             </div>
           </div>
         </div>
@@ -215,7 +216,15 @@ export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
               setShowModal("OpenModalNewPost");
             }}
           />
-          <span className="d-none d-xxl-block">Create</span>
+          <span
+            className="d-none d-xxl-block"
+            onClick={() => {
+              if (!localStorage.getItem("instagram-auth")) return nav("/login");
+              setShowModal("OpenModalNewPost");
+            }}
+          >
+            Create
+          </span>
         </div>
         <ModalNewPost
           setShowModal={setShowModal}

@@ -56,12 +56,14 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
     try {
       await api
         .get(`/like/${post.id}?user_id=${userSelector?.id}`)
-        .then((result) => setLike(result.data.result));
+        .then((result) => {
+          console.log(`here`, result.data.result);
+          setLike(result.data.result);
+        });
       await api
         .get(`/like/total_like/${post.id}?user_id=${userSelector?.id}`)
         .then((result) => {
-          console.log(result, `totallike`);
-          setTotalLike(result.data.result);
+          setTotalLike(result.data.total);
         });
     } catch (err) {
       console.log(err);
@@ -151,7 +153,11 @@ export default function PostsCardHome({ post, index, fetchPosts }) {
           </div>
         )}
         <div className="mr-3 my-1">
-          Liked by <b>{totalLike.toLocaleString(`id-ID`)} others</b>
+          Liked by{" "}
+          <b>
+            {totalLike.toLocaleString(`id-ID`)}{" "}
+            {totalLike === 0 ? null : totalLike > 1 ? "others" : "other"}
+          </b>
         </div>
         <div className="mr-3 my-1">
           <b>{post?.user?.username}</b>

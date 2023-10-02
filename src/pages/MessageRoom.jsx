@@ -1,4 +1,4 @@
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import Sidebar from "../components/Sidebar";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { API_URL, api } from "../json-server/api";
 import { io } from "socket.io-client";
 import { SVG_chatDotFill } from "../components/SVG/SVG_cat_dot_fill";
+import logo from "../asset/RepligramLogo.png";
 const socketConnection = io(API_URL);
 const api_url = process.env.REACT_APP_API;
 
@@ -16,8 +17,9 @@ export const MessageRoom = () => {
   const [notification, setNotification] = useState(new Set());
   const fetchMessageRoom = async () => {
     try {
-      const { data } = await api.get(`/message/chatroom/` + userSelector.id);
-      // setRoomList(data);
+      const { data } = await api.get(`/message/chatroom/` + userSelector.id, {
+        user_id: userSelector.id,
+      });
       const temp = new Set();
       const temp2 = [];
       data.forEach((val) => {
@@ -76,10 +78,48 @@ export const MessageRoom = () => {
           style={{
             padding: "0",
             display: "flex",
-            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
             minHeight: "95vh",
           }}
         >
+          <Container
+            style={{
+              position: "sticky",
+              top: "0px",
+              backgroundColor: "white",
+              zIndex: 2,
+            }}
+          >
+            <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
+              <div>
+                <img src={logo} style={{ maxHeight: "50px" }} />
+              </div>
+              <div className="d-flex flex-row" style={{ gap: "20px" }}>
+                <a>
+                  <img
+                    src="https://img.icons8.com/?size=1x&id=FFls4U4qS13I&format=png"
+                    alt="plus logo"
+                    style={{ maxWidth: "24px" }}
+                  />
+                </a>
+                <a>
+                  <img
+                    src="https://img.icons8.com/?size=1x&id=lFyaayFdhpED&format=gif"
+                    alt="plus logo"
+                    style={{ maxWidth: "24px" }}
+                  />
+                </a>
+                <a>
+                  <img
+                    src="https://img.icons8.com/?size=512&id=20202&format=png"
+                    alt="messanger logo"
+                    style={{ maxWidth: "24px" }}
+                  />
+                </a>
+              </div>
+            </div>
+          </Container>
           <Card>
             <Card.Header>Your Chat Room</Card.Header>
             {roomList.length &&

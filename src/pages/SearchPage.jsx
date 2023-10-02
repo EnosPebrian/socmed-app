@@ -4,6 +4,7 @@ import { api } from "../json-server/api";
 import { CardPics } from "./Profile";
 import Sidebar from "../components/Sidebar";
 import InfiniteScroll from "react-infinite-scroll-component";
+import logo from "../asset/RepligramLogo.png";
 
 export const SearchPage = () => {
   const [post, setPost] = useState([]);
@@ -61,53 +62,88 @@ export const SearchPage = () => {
             minHeight: "95vh",
           }}
         >
-          <Container className="p-0 m-0">
-            <Container style={{ maxWidth: "975px" }}>
-              <Form>
-                <Form.Group className="mb-3" controlId="search_page_form">
-                  <Form.Label>Search</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="search_page_search_box"
-                    placeholder="any name or words"
-                    autoFocus
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        setQueryText(e.target.value);
-                        e.preventDefault();
-                      }
-                    }}
-                    onChange={(e) => setQueryText(e.target.value)}
-                  />
-                </Form.Group>
-              </Form>
-              <InfiniteScroll
-                dataLength={post.length}
-                next={() => {
-                  ref.current += 1;
-                  totalPost.current += limit;
-                  setTimeout(() => fetchPost(queryText), 500);
-                }}
-                hasMore={totalPost.current < post.length}
-                loader={<h4>Loading...</h4>}
-                endMessage={
-                  <p style={{ textAlign: "center" }}>
-                    <b>Yay! You have seen it all</b>
-                  </p>
-                }
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
-                  gap: "4px",
-                }}
-              >
-                {post.length
-                  ? post.map((pics, index) => (
-                      <CardPics {...pics} index={index} />
-                    ))
-                  : null}
-              </InfiniteScroll>
+          <Container style={{ maxWidth: "975px" }}>
+            <Container
+              style={{
+                position: "sticky",
+                top: "0px",
+                backgroundColor: "white",
+                zIndex: 2,
+              }}
+            >
+              <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
+                <div>
+                  <img src={logo} style={{ maxHeight: "50px" }} />
+                </div>
+                <div className="d-flex flex-row" style={{ gap: "20px" }}>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=FFls4U4qS13I&format=png"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=lFyaayFdhpED&format=gif"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=512&id=20202&format=png"
+                      alt="messanger logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                </div>
+              </div>
             </Container>
+            <Form>
+              <Form.Group className="mb-3" controlId="search_page_form">
+                <Form.Label>Search</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="search_page_search_box"
+                  placeholder="any name or words"
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setQueryText(e.target.value);
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => setQueryText(e.target.value)}
+                />
+              </Form.Group>
+            </Form>
+            <InfiniteScroll
+              dataLength={post.length}
+              next={() => {
+                ref.current += 1;
+                totalPost.current += limit;
+                setTimeout(() => fetchPost(queryText), 500);
+              }}
+              hasMore={totalPost.current < post.length}
+              loader={<h4>Loading...</h4>}
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>Yay! You have seen it all</b>
+                </p>
+              }
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gap: "4px",
+              }}
+            >
+              {post.length
+                ? post.map((pics, index) => (
+                    <CardPics {...pics} index={index} />
+                  ))
+                : null}
+            </InfiniteScroll>
           </Container>
         </Col>
       </Row>

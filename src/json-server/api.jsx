@@ -6,6 +6,6 @@ export const API_URL = "https://api-socmed.crystalux.site";
 export const api = axios.create({
   baseURL: API_URL,
   headers: {
-    Authorization: localStorage.getItem("instagram-auth"),
+    Authorization: `Bearer ${localStorage.getItem("instagram-auth")}`,
   },
 });

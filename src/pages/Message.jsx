@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { SVG_message } from "../components/SVG/SVG_message";
-import { SVGinstagram } from "../components/SVG/SVG_Instagram";
+import logo from "../asset/RepligramLogo.png";
 import { useEffect, useRef, useState } from "react";
 import { API_URL, api } from "../json-server/api";
 import { io } from "socket.io-client";
@@ -104,35 +104,43 @@ export const Message = () => {
               width: "100%",
             }}
           >
-            <div className="d-flex d-md-none justify-content-around align-items-center mt-2">
-              <div>
-                <SVGinstagram />
+            <Container
+              style={{
+                position: "sticky",
+                top: "0px",
+                backgroundColor: "white",
+                zIndex: 2,
+              }}
+            >
+              <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
+                <div>
+                  <img src={logo} style={{ maxHeight: "50px" }} />
+                </div>
+                <div className="d-flex flex-row" style={{ gap: "20px" }}>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=FFls4U4qS13I&format=png"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=1x&id=lFyaayFdhpED&format=gif"
+                      alt="plus logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      src="https://img.icons8.com/?size=512&id=20202&format=png"
+                      alt="messanger logo"
+                      style={{ maxWidth: "24px" }}
+                    />
+                  </a>
+                </div>
               </div>
-              <div className="d-flex flex-row" style={{ gap: "20px" }}>
-                <a>
-                  <img
-                    src="https://img.icons8.com/?size=1x&id=FFls4U4qS13I&format=png"
-                    alt="plus logo"
-                    style={{ maxWidth: "24px" }}
-                  />
-                </a>
-                <a>
-                  <img
-                    src="https://img.icons8.com/?size=1x&id=lFyaayFdhpED&format=gif"
-                    alt="plus logo"
-                    style={{ maxWidth: "24px" }}
-                  />
-                </a>
-                <a>
-                  <img
-                    src="https://img.icons8.com/?size=512&id=20202&format=png"
-                    alt="messanger logo"
-                    style={{ maxWidth: "24px" }}
-                  />
-                </a>
-              </div>
-            </div>
-            <div className="d-none d-md-flex"></div>
+            </Container>
             <div className="d-flex align-items-center gap-2 bg-secondary-subtle py-1">
               <span>
                 <img

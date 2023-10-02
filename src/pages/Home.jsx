@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { SVGinstagram } from "../components/SVG/SVG_Instagram";
 import { Col, Container, Row } from "react-bootstrap";
 import FetchStory from "../components/FetchStory";
 import PostsCardHome from "../components/PostsCardHome";
@@ -8,6 +7,7 @@ import "../components/style.css";
 import { useEffect, useRef, useState } from "react";
 import { api } from "../json-server/api";
 import InfiniteScroll from "react-infinite-scroll-component";
+import logo from "../asset/RepligramLogo.png";
 
 export const Home = () => {
   const userSelector = useSelector((state) => state.auth);
@@ -75,7 +75,7 @@ export const Home = () => {
             >
               <div className="d-flex d-md-none justify-content-around align-items-center mt-3">
                 <div>
-                  <SVGinstagram />
+                  <img src={logo} style={{ maxHeight: "50px" }} />
                 </div>
                 <div className="d-flex flex-row" style={{ gap: "20px" }}>
                   <a>
