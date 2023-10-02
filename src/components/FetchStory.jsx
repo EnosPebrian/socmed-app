@@ -1,3 +1,5 @@
+import underconstruction from "../asset/underconstruction.avif";
+
 export default function FetchStory() {
   const isVisited = new Set();
   return (
@@ -21,13 +23,14 @@ export default function FetchStory() {
               style={{ maxHeight: "88px", width: "88px" }}
             >
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/800px-Question_mark_%28black%29.svg.png"
+                src={underconstruction}
                 alt="question mark"
                 width="77px"
+                style={{ borderRadius: "50%" }}
               />
             </div>
           </div>
-          <div className="w-100 text-center">Name</div>
+          <div className="w-100 text-center">Soon</div>
         </div>
       ))}
     </>
