@@ -53,12 +53,21 @@ export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
           className="position-fixed bg-white px-1 border border-secondary-subtle rounded"
           style={{ top: "50px", left: "60px", maxWidth: "330px", zIndex: "50" }}
         >
-          <div className="mb-2">SEARCH</div>
+          <div
+            className="float-end text-danger px-2"
+            type="button"
+            onClick={() => setShowSearch(false)}
+          >
+            x
+          </div>
+          <div className="my-2">
+            <b>SEARCH</b>
+          </div>
           <input
             type="text"
             placeholder="search"
             id="account-search-form"
-            className="bg-secondary-subtle rounded px-2"
+            className="bg-secondary-subtle rounded px-2 w-100"
             onChange={(e) => setSearch(e.target.value)}
           />
           <hr />
