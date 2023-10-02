@@ -1,15 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ModalNewPost } from "./ModalNewPost";
 import { SVGinstagram } from "./SVG/SVG_Instagram";
 import { SVG_logoInstagram } from "./SVG/SVG_logo_Instagram";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SVG_message } from "./SVG/SVG_message";
+import { API_URL, api } from "../json-server/api";
+import { io } from "socket.io-client";
+import { SVG_chatDotFill } from "./SVG/SVG_cat_dot_fill";
+const socketConnection = io(API_URL);
+const api_url = process.env.REACT_APP_API;
 
 export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
   const [showModal, setShowModal] = useState("");
+  const [notification, setNotification] = useState(false);
   const nav = useNavigate();
   const userSelector = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    socketConnection.connect();
+    socketConnection.on(
+      socketConnection.on(`newMessage_${userSelector.id}`, (receiver) =>
+        setNotification(true)
+      )
+    );
+
+    return () => {
+      socketConnection.disconnect();
+    };
+  }, []);
 
   return (
     <>
@@ -85,11 +104,22 @@ export default function Sidebar({ fetchPosts, flexdir = "flex-column" }) {
         </a>
         <a
           href="/message_room"
-          className="d-flex align-items-center pl-2 gap-2"
+          className="d-flex align-items-center pl-2 gap-2 position-relative"
           style={{ height: "50px" }}
+          onClick={() => setNotification(false)}
         >
           <SVG_message />
           <span className="d-none d-xxl-block">Messages</span>
+          <span
+            className="text-danger position-absolute"
+            style={{
+              top: "-1px",
+              left: "15px",
+              display: notification ? `block` : `none`,
+            }}
+          >
+            <SVG_chatDotFill />
+          </span>
         </a>
         <div
           className="d-flex align-items-center pl-2 gap-2"

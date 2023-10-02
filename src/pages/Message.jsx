@@ -70,7 +70,7 @@ export const Message = () => {
     return () => {
       socketConnection.disconnect();
     };
-  }, [localStorage.getItem(`instagram-auth`)]);
+  }, []);
 
   return (
     <>
@@ -99,7 +99,7 @@ export const Message = () => {
             className="d-grid"
             style={{
               gridTemplateRows: "auto auto 1fr auto",
-              height: "98vh",
+              height: "97vh",
               maxWidth: "600px",
               width: "100%",
             }}

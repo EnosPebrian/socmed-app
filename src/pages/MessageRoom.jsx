@@ -1,16 +1,19 @@
 import { Card, Col, Row } from "react-bootstrap";
 import Sidebar from "../components/Sidebar";
-import { async } from "q";
-import { API_URL, api } from "../json-server/api";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { API_URL, api } from "../json-server/api";
+import { io } from "socket.io-client";
+import { SVG_chatDotFill } from "../components/SVG/SVG_cat_dot_fill";
+const socketConnection = io(API_URL);
 const api_url = process.env.REACT_APP_API;
 
 export const MessageRoom = () => {
   const userSelector = useSelector((state) => state.auth);
   const [roomList, setRoomList] = useState([]);
   const nav = useNavigate();
+  const [notification, setNotification] = useState(new Set());
   const fetchMessageRoom = async () => {
     try {
       const { data } = await api.get(`/message/chatroom/` + userSelector.id);
@@ -23,6 +26,14 @@ export const MessageRoom = () => {
   useEffect(() => {
     if (!localStorage.getItem(`instagram-auth`)) return nav(`/login`);
     fetchMessageRoom();
+    socketConnection.connect();
+    socketConnection.on(`newMessage_${userSelector.id}`, (receiver) =>
+      setNotification(new Set([...Array.from(notification), receiver]))
+    );
+
+    return () => {
+      socketConnection.disconnect();
+    };
   }, []);
   return (
     <>
@@ -63,8 +74,11 @@ export const MessageRoom = () => {
               >
                 <Card.Header>Your Chat Room</Card.Header>
                 <Card>
-                  <div className="d-flex align-items-center gap-2 px-2 py-2">
-                    <a href={`/message/${room?.user_receivers?.username}`}>
+                  <a
+                    href={`/message/${room?.user_receivers?.username}`}
+                    className="d-flex align-items-center gap-2 px-2 py-2 position-relative"
+                  >
+                    <div className="d-flex align-items-center justify-content-center">
                       <img
                         src={
                           api_url +
@@ -79,11 +93,23 @@ export const MessageRoom = () => {
                           objectFit: "cover",
                         }}
                       />
-                    </a>
-                    <a href={`/message/${room?.user_receivers?.username}`}>
-                      {room?.user_receivers?.username}
-                    </a>
-                  </div>
+                    </div>
+                    <div>{room?.user_receivers?.username}</div>
+                    <span
+                      className="text-danger position-absolute"
+                      style={{
+                        right: "10px",
+                        display: notification.has(room?.user_receiver_id)
+                          ? "block"
+                          : "none",
+                      }}
+                      onClick={() =>
+                        notification.delete(room?.user_receiver_id)
+                      }
+                    >
+                      <SVG_chatDotFill />
+                    </span>
+                  </a>
                 </Card>
               </Card>
             ))}
